@@ -49,7 +49,7 @@ function createStairs() {
 		// The position is where the center of the block will be put.
 		// You can define position as THREE.Vector3(x, y, z) or in the following way:
 		stepMesh.position.x = 0;			// centered at origin
-		stepMesh.position.y = i*(verticalStepHeight + stepThickness) + (verticalStepHeight / 2);	// half of height: put it above ground plane
+		stepMesh.position.y = i * (verticalStepHeight + stepThickness) + (verticalStepHeight / 2);	// half of height: put it above ground plane
 		stepMesh.position.z = (i * (horizontalStepDepth - stepThickness));			// centered at origin
 		scene.add(stepMesh);
 
@@ -57,7 +57,7 @@ function createStairs() {
 		stepMesh = new THREE.Mesh(stepHorizontal, stepMaterialHorizontal);
 		stepMesh.position.x = 0;
 		// Push up by half of horizontal step's height, plus vertical step's height
-		stepMesh.position.y = i*(verticalStepHeight + stepThickness) + stepHalfThickness + verticalStepHeight;
+		stepMesh.position.y = i * (verticalStepHeight + stepThickness) + stepHalfThickness + verticalStepHeight;
 		// Push step forward by half the depth, minus half the vertical step's thickness
 		stepMesh.position.z = (i * (horizontalStepDepth - stepThickness)) - stepHalfThickness + horizontalStepDepth / 2;
 		scene.add(stepMesh);
@@ -93,7 +93,8 @@ function init() {
 	renderer = new THREE.WebGLRenderer({ antialias: true });
 	renderer.gammaInput = true;
 	renderer.gammaOutput = true;
-	renderer.setSize(canvasWidth, canvasHeight);
+	var devicePixelRatio = window.devicePixelRatio || 1; // Evaluates to 2 if Retina
+	renderer.setSize(canvasWidth / devicePixelRatio, canvasHeight / devicePixelRatio);
 	renderer.setClearColorHex(0xAAAAAA, 1.0);
 
 	// CAMERA
