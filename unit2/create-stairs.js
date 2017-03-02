@@ -19,21 +19,21 @@ var ground = true;
 function createStairs() {
 
 	// MATERIALS
-	var stepMaterialVertical = new THREE.MeshLambertMaterial( {
+	var stepMaterialVertical = new THREE.MeshLambertMaterial({
 		color: 0xA85F35
-	} );
-	var stepMaterialHorizontal = new THREE.MeshLambertMaterial( {
+	});
+	var stepMaterialHorizontal = new THREE.MeshLambertMaterial({
 		color: 0xBC7349
-	} );
+	});
 
 	var stepWidth = 500;
 	var stepSize = 200;
 	var stepThickness = 50;
 	// height from top of one step to bottom of next step up
 	var verticalStepHeight = stepSize;
-	var horizontalStepDepth = stepSize*2;
+	var horizontalStepDepth = stepSize * 2;
 
-	var stepHalfThickness = stepThickness/2;
+	var stepHalfThickness = stepThickness / 2;
 
 	// +Y direction is up
 	// Define the two pieces of the step, vertical and horizontal
@@ -42,40 +42,43 @@ function createStairs() {
 	var stepHorizontal = new THREE.CubeGeometry(stepWidth, stepThickness, horizontalStepDepth);
 	var stepMesh;
 
-	// Make and position the vertical part of the step
-	stepMesh = new THREE.Mesh( stepVertical, stepMaterialVertical );
-	// The position is where the center of the block will be put.
-	// You can define position as THREE.Vector3(x, y, z) or in the following way:
-	stepMesh.position.x = 0;			// centered at origin
-	stepMesh.position.y = verticalStepHeight/2;	// half of height: put it above ground plane
-	stepMesh.position.z = 0;			// centered at origin
-	scene.add( stepMesh );
+	let numSteps = 6;
+	for (let i = 0; i < numSteps; i++) {
+		// Make and position the vertical part of the step
+		stepMesh = new THREE.Mesh(stepVertical, stepMaterialVertical);
+		// The position is where the center of the block will be put.
+		// You can define position as THREE.Vector3(x, y, z) or in the following way:
+		stepMesh.position.x = 0;			// centered at origin
+		stepMesh.position.y = i*(verticalStepHeight + stepThickness) + (verticalStepHeight / 2);	// half of height: put it above ground plane
+		stepMesh.position.z = (i * (horizontalStepDepth - stepThickness));			// centered at origin
+		scene.add(stepMesh);
 
-	// Make and position the horizontal part
-	stepMesh = new THREE.Mesh( stepHorizontal, stepMaterialHorizontal );
-	stepMesh.position.x = 0;
-	// Push up by half of horizontal step's height, plus vertical step's height
-	stepMesh.position.y = stepThickness/2 + verticalStepHeight;
-	// Push step forward by half the depth, minus half the vertical step's thickness
-	stepMesh.position.z = horizontalStepDepth/2 - stepHalfThickness;
-	scene.add( stepMesh );
+		// Make and position the horizontal part
+		stepMesh = new THREE.Mesh(stepHorizontal, stepMaterialHorizontal);
+		stepMesh.position.x = 0;
+		// Push up by half of horizontal step's height, plus vertical step's height
+		stepMesh.position.y = i*(verticalStepHeight + stepThickness) + stepHalfThickness + verticalStepHeight;
+		// Push step forward by half the depth, minus half the vertical step's thickness
+		stepMesh.position.z = (i * (horizontalStepDepth - stepThickness)) - stepHalfThickness + horizontalStepDepth / 2;
+		scene.add(stepMesh);
+	}
 }
 
 function createCup() {
-	var cupMaterial = new THREE.MeshLambertMaterial( { color: 0xFDD017});
+	var cupMaterial = new THREE.MeshLambertMaterial({ color: 0xFDD017 });
 	// THREE.CylinderGeometry takes (radiusTop, radiusBottom, height, segmentsRadius)
-	var cupGeo = new THREE.CylinderGeometry( 200, 50, 400, 32 );
-	var cup = new THREE.Mesh( cupGeo, cupMaterial );
+	var cupGeo = new THREE.CylinderGeometry(200, 50, 400, 32);
+	var cup = new THREE.Mesh(cupGeo, cupMaterial);
 	cup.position.x = 0;
 	cup.position.y = 1725;
 	cup.position.z = 1925;
-	scene.add( cup );
-	cupGeo = new THREE.CylinderGeometry( 100, 100, 50, 32 );
-	cup = new THREE.Mesh( cupGeo, cupMaterial );
+	scene.add(cup);
+	cupGeo = new THREE.CylinderGeometry(100, 100, 50, 32);
+	cup = new THREE.Mesh(cupGeo, cupMaterial);
 	cup.position.x = 0;
 	cup.position.y = 1525;
 	cup.position.z = 1925;
-	scene.add( cup );
+	scene.add(cup);
 }
 
 function init() {
@@ -87,18 +90,18 @@ function init() {
 	var canvasRatio = canvasWidth / canvasHeight;
 
 	// RENDERER
-	renderer = new THREE.WebGLRenderer( { antialias: true } );
+	renderer = new THREE.WebGLRenderer({ antialias: true });
 	renderer.gammaInput = true;
 	renderer.gammaOutput = true;
 	renderer.setSize(canvasWidth, canvasHeight);
-	renderer.setClearColorHex( 0xAAAAAA, 1.0 );
+	renderer.setClearColorHex(0xAAAAAA, 1.0);
 
 	// CAMERA
-	camera = new THREE.PerspectiveCamera( 45, canvasRatio, 1, 40000 );
-	camera.position.set( -700, 500, -1600 );
+	camera = new THREE.PerspectiveCamera(45, canvasRatio, 1, 40000);
+	camera.position.set(-700, 500, -1600);
 	// CONTROLS
 	cameraControls = new THREE.OrbitAndPanControls(camera, renderer.domElement);
-	cameraControls.target.set(0,600,0);
+	cameraControls.target.set(0, 600, 0);
 
 	// Camera(2) for testing has following values:
 	// camera.position.set( 1225, 2113, 1814 );
@@ -109,41 +112,41 @@ function init() {
 function addToDOM() {
 	var container = document.getElementById('container');
 	var canvas = container.getElementsByTagName('canvas');
-	if (canvas.length>0) {
+	if (canvas.length > 0) {
 		container.removeChild(canvas[0]);
 	}
-	container.appendChild( renderer.domElement );
+	container.appendChild(renderer.domElement);
 }
 function fillScene() {
 	// SCENE
 	scene = new THREE.Scene();
-	scene.fog = new THREE.Fog( 0x808080, 3000, 6000 );
+	scene.fog = new THREE.Fog(0x808080, 3000, 6000);
 	// LIGHTS
-	var ambientLight = new THREE.AmbientLight( 0x222222 );
-	var light = new THREE.DirectionalLight( 0xFFFFFF, 1.0 );
-	light.position.set( 200, 400, 500 );
+	var ambientLight = new THREE.AmbientLight(0x222222);
+	var light = new THREE.DirectionalLight(0xFFFFFF, 1.0);
+	light.position.set(200, 400, 500);
 
-	var light2 = new THREE.DirectionalLight( 0xFFFFFF, 1.0 );
-	light2.position.set( -400, 200, -300 );
+	var light2 = new THREE.DirectionalLight(0xFFFFFF, 1.0);
+	light2.position.set(-400, 200, -300);
 
 	scene.add(ambientLight);
 	scene.add(light);
 	scene.add(light2);
 
 	if (ground) {
-		Coordinates.drawGround({size:1000});
+		Coordinates.drawGround({ size: 1000 });
 	}
 	if (gridX) {
-		Coordinates.drawGrid({size:1000,scale:0.01});
+		Coordinates.drawGrid({ size: 1000, scale: 0.01 });
 	}
 	if (gridY) {
-		Coordinates.drawGrid({size:1000,scale:0.01, orientation:"y"});
+		Coordinates.drawGrid({ size: 1000, scale: 0.01, orientation: "y" });
 	}
 	if (gridZ) {
-		Coordinates.drawGrid({size:1000,scale:0.01, orientation:"z"});
+		Coordinates.drawGrid({ size: 1000, scale: 0.01, orientation: "z" });
 	}
 	if (axes) {
-		Coordinates.drawAllAxes({axisLength:300,axisRadius:2,axisTess:50});
+		Coordinates.drawAllAxes({ axisLength: 300, axisRadius: 2, axisTess: 50 });
 	}
 	createCup();
 	var stairs = createStairs();
@@ -159,8 +162,7 @@ function animate() {
 function render() {
 	var delta = clock.getDelta();
 	cameraControls.update(delta);
-	if ( effectController.newGridX !== gridX || effectController.newGridY !== gridY || effectController.newGridZ !== gridZ || effectController.newGround !== ground || effectController.newAxes !== axes)
-	{
+	if (effectController.newGridX !== gridX || effectController.newGridY !== gridY || effectController.newGridZ !== gridZ || effectController.newGround !== ground || effectController.newAxes !== axes) {
 		gridX = effectController.newGridX;
 		gridY = effectController.newGridY;
 		gridZ = effectController.newGridZ;
@@ -185,10 +187,10 @@ function setupGui() {
 
 	var gui = new dat.GUI();
 	gui.add(effectController, "newGridX").name("Show XZ grid");
-	gui.add( effectController, "newGridY" ).name("Show YZ grid");
-	gui.add( effectController, "newGridZ" ).name("Show XY grid");
-	gui.add( effectController, "newGround" ).name("Show ground");
-	gui.add( effectController, "newAxes" ).name("Show axes");
+	gui.add(effectController, "newGridY").name("Show YZ grid");
+	gui.add(effectController, "newGridZ").name("Show XY grid");
+	gui.add(effectController, "newGround").name("Show ground");
+	gui.add(effectController, "newAxes").name("Show axes");
 }
 
 
@@ -198,7 +200,7 @@ try {
 	setupGui();
 	addToDOM();
 	animate();
-} catch(e) {
+} catch (e) {
 	var errorReport = "Your program encountered an unrecoverable error, can not draw on canvas. Error was:<br/><br/>";
-	$('#container').append(errorReport+e);
+	$('#container').append(errorReport + e);
 }
