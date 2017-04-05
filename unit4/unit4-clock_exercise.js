@@ -75,19 +75,26 @@ function fillScene() {
 		new THREE.CubeGeometry( 70, 4, 4 ), minuteHandMaterial );
 	cube.position.y = 14;
 	cube.position.x = 70/2 - 10;
-	cube.rotation.y = -60 * Math.PI/180;
-	scene.add( cube );
+    let minuteHandHolder = new THREE.Object3D();
+    minuteHandHolder.add(cube);
+
+    minuteHandHolder.rotation.y = -60 * Math.PI/180;
+	scene.add( minuteHandHolder );
 
 	var sphere = new THREE.Mesh(
 		new THREE.SphereGeometry( 0.5, 32, 16 ), hourHandMaterial );
 	sphere.position.y = 18;	// move the hand above the other hand
 	sphere.position.x = 50/2 - 10;
-	sphere.rotation.y = 30 * Math.PI/180;
 	sphere.scale.x = 50;
 	sphere.scale.y = 4;
 	sphere.scale.z = 4;
 
-	scene.add( sphere );
+	let handHolder = new THREE.Object3D();
+	handHolder.add(sphere);
+
+    handHolder.rotation.y = 30 * Math.PI/180;
+
+	scene.add( handHolder );
 }
 
 function init() {
@@ -102,7 +109,8 @@ function init() {
 	renderer = new THREE.WebGLRenderer( { antialias: true } );
 	renderer.gammaInput = true;
 	renderer.gammaOutput = true;
-	renderer.setSize(canvasWidth, canvasHeight);
+    var devicePixelRatio = window.devicePixelRatio || 1; // Evaluates to 2 if Retina
+    renderer.setSize( canvasWidth/devicePixelRatio, canvasHeight/devicePixelRatio);
 	renderer.setClearColorHex( 0xAAAAAA, 1.0 );
 
 	// CAMERA

@@ -67,6 +67,12 @@ function fillScene() {
 	// YOUR CODE HERE
 	// Add the second grabber handRight. Note that it uses a different color, defined above
 	// ALSO EDIT render() TO ENABLE CONTROLS FOR GRABBER
+    handRight = new THREE.Object3D();
+    createRobotGrabber( handRight, handLength, robotHandRightMaterial );
+    // Move the hand part to the end of the forearm.
+    handRight.position.y = faLength;
+    forearm.add( handRight );
+
 }
 
 function createRobotGrabber( part, length, material )
@@ -127,7 +133,8 @@ function init() {
 	renderer = new THREE.WebGLRenderer( { antialias: true } );
 	renderer.gammaInput = true;
 	renderer.gammaOutput = true;
-	renderer.setSize(canvasWidth, canvasHeight);
+    var devicePixelRatio = window.devicePixelRatio || 1; // Evaluates to 2 if Retina
+    renderer.setSize( canvasWidth/devicePixelRatio, canvasHeight/devicePixelRatio);
 	renderer.setClearColorHex( 0xAAAAAA, 1.0 );
 
 	// CAMERA
@@ -198,7 +205,11 @@ function render() {
 	handLeft.rotation.z = effectController.hz * Math.PI/180;	// yaw
 	handLeft.position.z = effectController.htz;	// translate
 
-	renderer.render(scene, camera);
+    handRight.rotation.z = effectController.hz * Math.PI/180;	// yaw
+    handRight.position.z = -1 * effectController.htz;	// translate
+
+
+    renderer.render(scene, camera);
 }
 
 function setupGui() {

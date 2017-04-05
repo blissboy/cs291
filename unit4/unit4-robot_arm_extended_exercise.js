@@ -57,6 +57,12 @@ function fillScene() {
 	// YOUR CODE HERE
 	body = new THREE.Object3D();
 	var bodyLength = 60;
+	var body = new THREE.Object3D();
+	createRobotBody(body, bodyLength, robotBodyMaterial);
+	arm.position.y = bodyLength;
+
+	body.add(arm);
+	scene.add(body);
 	// Add robot body here, put arm at top.
 	// Note that "body" is already declared at top of this code.
 	// Here's the call to create the body itself:
@@ -140,7 +146,8 @@ function init() {
 	renderer = new THREE.WebGLRenderer( { antialias: true } );
 	renderer.gammaInput = true;
 	renderer.gammaOutput = true;
-	renderer.setSize(canvasWidth, canvasHeight);
+    var devicePixelRatio = window.devicePixelRatio || 1; // Evaluates to 2 if Retina
+    renderer.setSize( canvasWidth/devicePixelRatio, canvasHeight/devicePixelRatio);
 	renderer.setClearColorHex( 0xAAAAAA, 1.0 );
 
 	// CAMERA

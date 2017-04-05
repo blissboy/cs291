@@ -44,18 +44,26 @@ function createDrinkingBird() {
 	headMaterial.color.g = 1/255;
 	headMaterial.color.b = 5/255;
 
-	var hatMaterial = new THREE.MeshLambertMaterial( );
+	//var hatMaterial = new THREE.MeshPhongMaterial({shininess:100} );
+    var hatMaterial = new THREE.MeshPhongMaterial();
+    //var hatMaterial = new THREE.MeshLambertMaterial();
 	hatMaterial.color.r = 24/255;
 	hatMaterial.color.g = 38/255;
 	hatMaterial.color.b = 77/255;
 
-	var bodyMaterial = new THREE.MeshLambertMaterial( );
+	hatMaterial.shininess = 100;
+	hatMaterial.specular.setRGB(0.5,0.5,0.5);
+
+	var bodyMaterial = new THREE.MeshPhongMaterial({shininess:100} );
 	bodyMaterial.color.setRGB( 31/255, 86/255, 169/255 );
+    bodyMaterial.specular.setRGB(0.5,0.5,0.5);
 
-	var legMaterial = new THREE.MeshLambertMaterial( );
+    var legMaterial = new THREE.MeshPhongMaterial({shininess:4} );
 	legMaterial.color.setHex( 0xAdA79b );
+    legMaterial.specular.setRGB(0.5,0.5,0.5);
 
-	var footMaterial = new THREE.MeshLambertMaterial( { color: 0x960f0b } );
+	var footMaterial = new THREE.MeshPhongMaterial( { color: 0x960f0b, shininess: 30 } );
+    footMaterial.specular.setRGB(0.5,0.5,0.5);
 
 	var sphere, cylinder, cube;
 
@@ -164,8 +172,9 @@ function init() {
 	renderer = new THREE.WebGLRenderer( { antialias: true } );
 	renderer.gammaInput = true;
 	renderer.gammaOutput = true;
-	renderer.setSize(canvasWidth, canvasHeight);
-	renderer.setClearColorHex( 0xAAAAAA, 1.0 );
+    var devicePixelRatio = window.devicePixelRatio || 1; // Evaluates to 2 if Retina
+    renderer.setSize( canvasWidth/devicePixelRatio, canvasHeight/devicePixelRatio);
+    renderer.setClearColorHex( 0xAAAAAA, 1.0 );
 
 	// CAMERA
 	camera = new THREE.PerspectiveCamera( 45, canvasRatio, 1, 4000 );
