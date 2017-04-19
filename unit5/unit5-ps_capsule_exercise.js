@@ -51,8 +51,30 @@ function createCapsule( material, radius, top, bottom, segmentsWidth, openTop, o
 	// openTop and/or openBottom is false. Bonus points: use instancing!
 	var sphGeom = new THREE.SphereGeometry( radius, segmentsWidth, segmentsWidth/2 );
 
-	// You'll probably want to return something other than this...
-	return cyl;
+
+	if ( ! openTop ) {
+		let topCap = new THREE.Mesh(sphGeom, material);
+		let topCapPos = new THREE.Vector3();
+		topCapPos = topCapPos.subVectors(top,bottom).multiplyScalar(.5).length();
+		topCap.position.y = topCapPos;
+		cyl.add(topCap);
+    }
+
+    if ( ! openBottom ) {
+        let bottomCap = new THREE.Mesh(sphGeom, material);
+        let bottomCapPos = new THREE.Vector3();
+        bottomCapPos = bottomCapPos.subVectors(top,bottom).multiplyScalar(-.5).length();
+        bottomCap.position.y = bottomCapPos;
+        cyl.add(bottomCap);
+    }
+
+
+    let capsule = new THREE.Object3D();
+    capsule.add(cyl);
+
+
+    // You'll probably want to return something other than this...
+	return capsule;
 
 }
 
@@ -189,7 +211,8 @@ function init() {
 	renderer = new THREE.WebGLRenderer( { antialias: false } );
 	renderer.gammaInput = true;
 	renderer.gammaOutput = true;
-	renderer.setSize(canvasWidth, canvasHeight);
+    var devicePixelRatio = window.devicePixelRatio || 1; // Evaluates to 2 if Retina
+    renderer.setSize( canvasWidth/devicePixelRatio, canvasHeight/devicePixelRatio);
 	renderer.setClearColorHex( 0xAAAAAA, 1.0 );
 
 	// CAMERA
@@ -286,3 +309,6 @@ try {
 	$('#container').append(errorReport+e);
 }
 
+function vec3ToString(vec) {
+    return (`${vec.x},${vec.y},${vec.z}`);
+}

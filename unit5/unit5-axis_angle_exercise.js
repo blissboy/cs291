@@ -47,6 +47,7 @@ function fillScene() {
 	// or just simply theta = Math.acos( cylAxis.y );
 
 	// YOUR CODE HERE
+	// from 1,1,1 to -1,-1,-1
 	var cylinder = new THREE.Mesh(
 		new THREE.CylinderGeometry( 0.2, 0.2, cylLength, 32 ), cylinderMaterial );
 	var rotationAxis = new THREE.Vector3(1,0,-1);
@@ -56,6 +57,40 @@ function fillScene() {
 	cylinder.matrixAutoUpdate = false;
 	cylinder.matrix.makeRotationAxis( rotationAxis, theta );
 	scene.add( cylinder );
+
+    // from 1,1,-1 to -1,-1,1
+    var cylinder = new THREE.Mesh(
+        new THREE.CylinderGeometry( 0.2, 0.2, cylLength, 32 ), cylinderMaterial );
+    var rotationAxis = new THREE.Vector3(-1,0,1);
+    // makeRotationAxis wants its axis normalized
+    rotationAxis.normalize();
+    // don't use position, rotation, scale
+    cylinder.matrixAutoUpdate = false;
+    cylinder.matrix.makeRotationAxis( rotationAxis, theta );
+    scene.add( cylinder );
+
+    // from 1,-1,-1 to -1,1,1
+    var cylinder = new THREE.Mesh(
+        new THREE.CylinderGeometry( 0.2, 0.2, cylLength, 32 ), cylinderMaterial );
+    var rotationAxis = new THREE.Vector3(-1,0,-1);
+    // makeRotationAxis wants its axis normalized
+    rotationAxis.normalize();
+    // don't use position, rotation, scale
+    cylinder.matrixAutoUpdate = false;
+    cylinder.matrix.makeRotationAxis( rotationAxis, theta );
+    scene.add( cylinder );
+
+    // from -1,1,1 to 1,-1,-1
+    var cylinder = new THREE.Mesh(
+        new THREE.CylinderGeometry( 0.2, 0.2, cylLength, 32 ), cylinderMaterial );
+    var rotationAxis = new THREE.Vector3(1,0,1);
+    // makeRotationAxis wants its axis normalized
+    rotationAxis.normalize();
+    // don't use position, rotation, scale
+    cylinder.matrixAutoUpdate = false;
+    cylinder.matrix.makeRotationAxis( rotationAxis, theta );
+    scene.add( cylinder );
+
 
 }
 
@@ -97,7 +132,8 @@ function init() {
 	renderer = new THREE.WebGLRenderer( { antialias: true } );
 	renderer.gammaInput = true;
 	renderer.gammaOutput = true;
-	renderer.setSize(canvasWidth, canvasHeight);
+    var devicePixelRatio = window.devicePixelRatio || 1; // Evaluates to 2 if Retina
+    renderer.setSize( canvasWidth/devicePixelRatio, canvasHeight/devicePixelRatio);
 	renderer.setClearColorHex( 0xAAAAAA, 1.0 );
 
 	var container = document.getElementById('container');

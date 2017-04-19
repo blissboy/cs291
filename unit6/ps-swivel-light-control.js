@@ -20,6 +20,8 @@ function fillScene() {
 	light = new THREE.DirectionalLight( 0xFFFFFF, 1.5 );
 	light.position.set( 1, 1, 0 );
 
+
+
 	scene.add( light );
 
 	// MATERIALS
@@ -221,7 +223,8 @@ function init() {
 	renderer = new THREE.WebGLRenderer( { antialias: true } );
 	renderer.gammaInput = true;
 	renderer.gammaOutput = true;
-	renderer.setSize(canvasWidth, canvasHeight);
+    var devicePixelRatio = window.devicePixelRatio || 1; // Evaluates to 2 if Retina
+    renderer.setSize( canvasWidth/devicePixelRatio, canvasHeight/devicePixelRatio);
 	renderer.setClearColorHex( 0xAAAAAA, 1.0 );
 
 	// CAMERA
@@ -255,6 +258,10 @@ function animate() {
 
 function render() {
 	var delta = clock.getDelta();
+
+	light.position.x = Math.cos(effectController.angle * Math.PI / 180);
+	light.position.z = Math.sin(effectController.angle * Math.PI / 180);
+
 	cameraControls.update(delta);
 	renderer.render(scene, camera);
 }
